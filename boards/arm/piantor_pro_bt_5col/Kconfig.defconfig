@@ -1,23 +1,23 @@
 # Copyright (c) 2020 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
-if BOARD_SOFLE_CHOC_PRO_LEFT
+if BOARD_PIANTOR_PRO_BT_5COL_LEFT
 
 config ZMK_KEYBOARD_NAME
-	default "Sofle Choc BT"
+	default "Piantor Pro BT"
 
 config ZMK_SPLIT_ROLE_CENTRAL
-    default y
+	default y
 
-endif # BOARD_SOFLE_CHOC_PRO_LEFT
+endif # BOARD_PIANTOR_PRO_BT_5COL_LEFT
 
-if BOARD_SOFLE_CHOC_PRO_LEFT || BOARD_SOFLE_CHOC_PRO_RIGHT 
+if BOARD_PIANTOR_PRO_BT_5COL_LEFT || BOARD_PIANTOR_PRO_BT_5COL_RIGHT
 
 config BOARD
-    default "sofle_choc_pro"
+	default "piantor_pro_bt_5col"
 
 config ZMK_SPLIT
-    default y
+	default y
 
 if USB
 
@@ -36,6 +36,6 @@ config I2C
 	default y
 
 config ZMK_MAX17048
-    default y
+	default y
 
-endif # BOARD_SOFLE_CHOC_PRO_LEFT || BOARD_SOFLE_CHOC_PRO_RIGHT
+endif # BOARD_PIANTOR_PRO_BT_5COL_LEFT || BOARD_PIANTOR_PRO_BT_5COL_RIGHT
