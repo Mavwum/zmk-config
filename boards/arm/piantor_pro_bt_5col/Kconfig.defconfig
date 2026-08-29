@@ -3,9 +3,6 @@
 
 if BOARD_PIANTOR_PRO_BT_5COL_LEFT
 
-config ZMK_KEYBOARD_NAME
-	default "Piantor Pro BT"
-
 config ZMK_SPLIT_ROLE_CENTRAL
 	default y
 

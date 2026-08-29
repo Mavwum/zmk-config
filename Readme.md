@@ -135,6 +135,14 @@ west build -s zmk/app -d build/corne-5col-left \
 Change the board target as required. The resulting firmware is written to
 `build/corne-5col-left/zephyr/zmk.uf2`.
 
+## Configuration settings
+
+User-adjustable firmware settings belong in the matching `config/*.conf` file.
+This includes the keyboard name, power management, RGB defaults, display idle
+behavior, and an optional pointing setting. The files under `boards/` describe
+the keyboard hardware and its internal defaults; normal users should not edit
+them.
+
 ## Flashing
 
 The halves use different firmware because the left half is the central side
@@ -196,7 +204,8 @@ loaded again.
 Deep sleep is enabled on every half. The keyboard enters deep sleep after one
 hour (`3600000` ms) without activity and wakes when a key is pressed. The long
 timeout avoids the keyboard appearing to sleep during normal breaks while
-still conserving battery during extended inactivity.
+still conserving battery during extended inactivity. Change these settings in
+the matching `config/*.conf` file.
 
 ## RGB controls
 
