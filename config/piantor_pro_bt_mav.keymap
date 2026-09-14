@@ -138,20 +138,20 @@
         extra_layer_1 {
             display-name = "EXTRA 1";
             bindings = <
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                              &trans &trans &trans &trans &trans &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+                                    &trans &trans &trans &trans &trans &trans
             >;
         };
 
         extra_layer_2 {
             display-name = "EXTRA 2";
             bindings = <
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                              &trans &trans &trans &trans &trans &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+              &trans  &trans &trans &trans &trans &trans &trans &trans &trans &trans &tran &trans
+                                    &trans &trans &trans &trans &trans &trans
             >;
         };
     };
