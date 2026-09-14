@@ -25,6 +25,29 @@
 / {
     chosen { zmk,physical-layout = &five_col_layout; };
 
+    macros {
+        ae: ae {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp DOUBLE_QUOTES &kp A>;
+            label = "AE";
+        };
+
+        oe: oe {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp DOUBLE_QUOTES &kp O>;
+            label = "OE";
+        };
+
+        ue: ue {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp DOUBLE_QUOTES &kp U>;
+            label = "UE";
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -38,7 +61,7 @@
             //       | ESC/MEDIA | SPACE/NAV | TAB/FUN | RET/SYM | BSPC/NUM | DEL/ADJ |
 
             bindings = <
-&kp TAB  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &kp BSPC  &kp LCTRL  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &mt RIGHT_CONTROL SEMI  &kp SQT  &kp LSHFT  &lt 6 Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &kp DOT  &lt 6 SLASH  &kp ESC  &lt MEDIA DELETE  &lt NAV BACKSPACE  &lt 7 ESC  &lt SYM RET  &lt NUM SPACE  &lt 5 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &ue  &kp LCTRL  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &kp LSHFT  &lt 6 Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &kp DOT  &lt 6 SLASH  &kp ESC  &lt MEDIA DELETE  &lt NAV BACKSPACE  &lt 7 ESC  &lt SYM RET  &lt NUM SPACE  &lt 5 TAB
             >;
         };
 
