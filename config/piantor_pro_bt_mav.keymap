@@ -132,7 +132,7 @@
             //                  |     |     |     |     |     |     |
 
             bindings = <
-&kp TAB  &none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &kp BSPC  &kp LCTRL  &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none  &kp CAPS  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &kp LSHFT  &none  &none  &none  &none  &none  &kp INS  &kp HOME  &kp PG_DN  &kp PG_UP  &kp END  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &none  &none  &none  &none  &none  &kp RS(RG(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &trans  &trans  &kp LEFT_CONTROL  &kp LALT  &kp LEFT_GUI  &kp LSHFT  &none  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT  &trans  &trans  &trans  &none  &none  &none  &tog 1  &none  &kp RG(LEFT)  &kp PAGE_DOWN  &kp PAGE_UP  &kp RG(RIGHT)  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp SPACE  &kp TAB
             >;
         };
 
