@@ -182,7 +182,7 @@
             //                  |  (  |  )  |  _  |     |     |     |
 
             bindings = <
-&trans  &kp LBRC  &kp AMPS  &kp ASTRK  &kp LPAR  &kp RBRC  &none  &none  &none  &none  &none  &trans  &trans  &kp COLON  &kp DLLR  &kp PRCNT  &kp CARET  &kp PLUS  &none  &kp RSHFT  &kp RCTRL  &kp RALT  &kp RGUI  &trans  &trans  &kp TILDE  &kp EXCL  &kp AT  &kp HASH  &kp PIPE  &none  &none  &none  &none  &none  &trans  &kp LPAR  &kp RPAR  &kp UNDER  &trans  &trans  &trans
+&trans  &kp LBRC  &kp AMPS  &kp ASTRK  &kp LPAR  &kp RBRC  &none  &none  &none  &none  &none  &trans  &trans  &kp COLON  &kp DLLR  &kp PRCNT  &kp CARET  &kp PLUS  &none  &kp RSHFT  &kp RIGHT_GUI  &kp RALT  &kp RIGHT_CONTROL  &trans  &trans  &kp TILDE  &kp EXCL  &kp AT  &kp HASH  &kp PIPE  &none  &tog 5  &none  &none  &none  &trans  &kp LPAR  &kp RPAR  &kp UNDER  &trans  &trans  &trans
             >;
         };
 
