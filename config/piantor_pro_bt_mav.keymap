@@ -48,6 +48,63 @@
         };
     };
 
+    combos {
+        compatible = "zmk,combos";
+
+        semicolon {
+            bindings = <&kp SEMI>;
+            key-positions = <33 32>;
+        };
+    };
+
+    behaviors {
+        oe_rctrl: oe_rctrl {
+            compatible = "zmk,behavior-hold-tap";
+            label = "OE_RCTRL";
+            bindings = <&kp>, <&oe>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            hold-while-undecided;
+            hold-trigger-key-positions = <0 1 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 2 3 4 5>;
+            hold-trigger-on-release;
+        };
+
+        slash_qm_em: slash_qm_em {
+            compatible = "zmk,behavior-tap-dance";
+            label = "SLASH_QM_EM";
+            #binding-cells = <0>;
+            bindings = <&kp SLASH>, <&kp QUESTION>, <&kp EXCL>;
+        };
+
+        lt8_slash: lt8_slash {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LT8_SLASH";
+            bindings = <&lt>, <&slash_qm_em>;
+
+            #binding-cells = <2>;
+            hold-while-undecided;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <0 1 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 2 3 4 5>;
+            tapping-term-ms = <200>;
+        };
+
+        dot_colon: dot_colon {
+            compatible = "zmk,behavior-tap-dance";
+            label = "DOT_COLON";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp COLON>;
+        };
+
+        comma_dquote: comma_dquote {
+            compatible = "zmk,behavior-tap-dance";
+            label = "COMMA_DQUOTE";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp DOUBLE_QUOTES>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -61,7 +118,7 @@
             //       | ESC/MEDIA | SPACE/NAV | TAB/FUN | RET/SYM | BSPC/NUM | DEL/ADJ |
 
             bindings = <
-&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &ue  &kp LCTRL  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &kp LSHFT  &lt 6 Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &kp DOT  &lt 6 SLASH  &kp ESC  &lt MEDIA DELETE  &lt NAV BACKSPACE  &lt 7 ESC  &lt SYM RET  &lt NUM SPACE  &lt 5 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe_rctrl RIGHT_CONTROL 0  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &comma_dquote  &dot_colon  &lt8_slash 7 0  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
             >;
         };
 
@@ -76,6 +133,13 @@
 
             bindings = <
 &kp TAB  &none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &kp BSPC  &kp LCTRL  &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none  &kp CAPS  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &kp LSHFT  &none  &none  &none  &none  &none  &kp INS  &kp HOME  &kp PG_DN  &kp PG_UP  &kp END  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        mouse_layer {
+            display-name = "MOUSE";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
@@ -149,17 +213,10 @@
             >;
         };
 
-        mouse_layer {
-            display-name = "MOUSE";
+        shortcut_layer {
+            display-name = "shortcut";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-            >;
-        };
-
-        extra_layer_2 {
-            display-name = "EXTRA 2";
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LS(LG(NUMBER_4))  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
