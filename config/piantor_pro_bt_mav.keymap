@@ -7,6 +7,7 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
 #define BASE 0
@@ -132,14 +133,14 @@
             //                  |     |     |     |     |     |     |
 
             bindings = <
-&trans  &none  &none  &none  &none  &none  &kp RS(RG(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &trans  &trans  &kp LEFT_CONTROL  &kp LALT  &kp LEFT_GUI  &kp LSHFT  &none  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT  &trans  &trans  &trans  &none  &none  &none  &tog 1  &none  &kp RG(LEFT)  &kp PAGE_DOWN  &kp PAGE_UP  &kp RG(RIGHT)  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp SPACE  &kp TAB
+&none  &none  &none  &none  &none  &none  &kp RS(RG(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &none  &none  &kp LEFT_CONTROL  &kp LALT  &kp LEFT_GUI  &kp LSHFT  &none  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT  &none  &none  &none  &none  &none  &none  &tog 1  &none  &kp RG(LEFT)  &kp PAGE_DOWN  &kp PAGE_UP  &kp RG(RIGHT)  &none  &none  &trans  &trans  &trans  &kp ENTER  &kp SPACE  &kp TAB
             >;
         };
 
         mouse_layer {
             display-name = "MOUSE";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &tran  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &none  &none  &none  &none  &none  &kp RG(RS(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &none  &none  &kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI  &kp LEFT_SHIFT  &none  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &none  &none  &none  &none  &none  &none  &tog 2  &none  &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &none  &none  &trans  &trans  &trans  &mkp RCLK  &mkp LCLK  &mkp MCLK
             >;
         };
 
