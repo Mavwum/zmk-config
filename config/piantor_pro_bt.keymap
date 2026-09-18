@@ -132,7 +132,7 @@
 
             bindings = <
                 &none            &none       &none       &none       &none       &none       &kp RS(RG(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
-                &none            &kp LEFT_CONTROL &kp LALT &kp LEFT_GUI &kp LSHFT &none &kp LEFT_ARROW &kp DOWN_ARROW &kp UP_ARROW &kp RIGHT &none &none
+                &none            &sk LEFT_CONTROL &sk LALT &sk LEFT_GUI &sk LSHFT &none &kp LEFT_ARROW &kp DOWN_ARROW &kp UP_ARROW &kp RIGHT &none &none
                 &none            &none       &none       &none       &none       &none       &tog 1     &none       &kp RG(LEFT) &kp PAGE_DOWN &kp PAGE_UP &kp RG(RIGHT)
                                  &trans           &trans     &trans     &kp ENTER  &kp SPACE  &kp TAB
             >;
@@ -147,7 +147,7 @@
             //| TRANS | TRANS | TRANS | RCLICK | LCLICK | MCLICK |
             bindings = <
                 &none            &none       &none       &none       &none       &none       &kp RG(RS(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
-                &none            &kp LEFT_CONTROL &kp LEFT_ALT &kp LEFT_GUI &kp LEFT_SHIFT &none &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &none &none
+                &none            &sk LEFT_CONTROL &sk LEFT_ALT &sk LEFT_GUI &sk LEFT_SHIFT &none &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &none &none
                 &none            &none       &none       &none       &none       &none       &tog 2     &none       &msc SCRL_LEFT &msc SCRL_DOWN &msc SCRL_UP &msc SCRL_RIGHT
                                  &trans           &trans     &trans     &mkp RCLK  &mkp LCLK  &mkp MCLK
             >;
@@ -164,7 +164,7 @@
 
             bindings = <
                 &none            &none       &none       &none       &none       &rgb_ug RGB_TOG &rgb_ug RGB_HUD &rgb_ug RGB_HUI &rgb_ug RGB_SAD &rgb_ug RGB_SAI &rgb_ug RGB_BRD &rgb_ug RGB_BRI
-                &none            &kp LEFT_CONTROL &kp LEFT_ALT &kp LGUI &kp LSHIFT &rgb_ug RGB_EFF &kp C_PREV &kp C_VOL_DN &kp C_VOLUME_UP &kp C_NEXT &rgb_ug RGB_SPD &rgb_ug RGB_SPI
+                &none            &sk LEFT_CONTROL &sk LEFT_ALT &sk LGUI &sk LSHIFT &rgb_ug RGB_EFF &kp C_PREV &kp C_VOL_DN &kp C_VOLUME_UP &kp C_NEXT &rgb_ug RGB_SPD &rgb_ug RGB_SPI
                 &none            &sys_reset  &bootloader &studio_unlock &tog 3 &none &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4
                                  &trans           &trans     &trans     &kp C_STOP &kp C_PLAY_PAUSE &kp C_MUTE
             >;
@@ -181,7 +181,7 @@
 
             bindings = <
                 &trans           &kp LBKT   &kp N7      &kp N8      &kp N9      &kp RBKT   &none       &none       &none       &none       &none       &trans
-                &trans           &kp SEMI   &kp N4      &kp N5      &kp N6      &kp EQUAL  &none       &kp RSHFT   &kp RIGHT_GUI &kp RALT   &kp RIGHT_CONTROL &trans
+                &trans           &kp SEMI   &kp N4      &kp N5      &kp N6      &kp EQUAL  &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &trans
                 &trans           &kp GRAVE  &kp N1      &kp N2      &kp N3      &kp BSLH   &none       &tog 4      &none       &none       &none       &trans
                                  &kp DOT    &kp N0      &kp MINUS   &trans      &trans      &trans
             >;
@@ -198,7 +198,7 @@
 
             bindings = <
                 &trans           &kp LBRC   &kp AMPS    &kp ASTRK   &kp LPAR    &kp RBRC   &none       &none       &none       &none       &none       &trans
-                &trans           &kp COLON  &kp DLLR    &kp PRCNT   &kp CARET   &kp PLUS   &none       &kp RSHFT   &kp RIGHT_GUI &kp RALT   &kp RIGHT_CONTROL &trans
+                &trans           &kp COLON  &kp DLLR    &kp PRCNT   &kp CARET   &kp PLUS   &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &trans
                 &trans           &kp TILDE  &kp EXCL    &kp AT      &kp HASH    &kp PIPE   &none       &tog 5      &none       &none       &none       &trans
                                  &kp LPAR   &kp RPAR    &kp UNDER   &trans      &trans      &trans
             >;
@@ -215,7 +215,7 @@
 
             bindings = <
                 &trans           &kp F12    &kp F7      &kp F8      &kp F9      &kp LS(LG(NUMBER_4)) &none       &none       &none       &none       &none       &trans
-                &trans           &kp F11    &kp F4      &kp F5      &kp F6      &kp SLCK   &none       &kp RIGHT_SHIFT &kp RIGHT_GUI &kp RIGHT_ALT &kp RIGHT_CONTROL &trans
+                &trans           &kp F11    &kp F4      &kp F5      &kp F6      &kp SLCK   &none       &sk RIGHT_SHIFT &sk RIGHT_GUI &sk RIGHT_ALT &sk RIGHT_CONTROL &trans
                 &trans           &kp F10    &kp F1      &kp F2      &kp F3      &kp PAUSE_BREAK &none    &tog 6      &none       &none       &none       &trans
                                  &kp DEL    &kp BACKSPACE &kp ESC    &trans      &trans      &trans
             >;
@@ -232,7 +232,7 @@
 
             bindings = <
                 &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(V)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
-                &none     &kp LEFT_CONTROL &kp LEFT_ALT &kp LGUI &kp LSHIFT   &none  &none       &kp RSHFT   &kp RIGHT_GUI &kp RALT   &kp RIGHT_CONTROL &trans
+                &none     &sk LEFT_CONTROL &sk LEFT_ALT &sk LGUI &sk LSHIFT   &none  &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &trans
                 &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(V)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
                                  &mkp MCLK           &mkp LCLK     &mkp RCLK     &mkp RCLK  &mkp LCLK  &mkp MCLK
             >;
