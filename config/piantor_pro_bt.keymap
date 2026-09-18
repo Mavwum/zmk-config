@@ -231,10 +231,10 @@
             //| TRANS | TRANS | TRANS | TRANS | TRANS | TRANS |
 
             bindings = <
-                &none            &rgb_ug RGB_HUD &rgb_ug RGB_HUI &rgb_ug RGB_SAD &rgb_ug RGB_SAI &rgb_ug RGB_EFF &rgb_ug RGB_EFF &rgb_ug RGB_SAI &rgb_ug RGB_SAD &rgb_ug RGB_HUI &rgb_ug RGB_HUD &none
-                &none            &kp C_PREV  &kp C_VOL_DN &kp C_MUTE &kp C_VOL_UP &kp C_NEXT &kp C_PREV &kp C_VOL_DN &kp C_MUTE &kp C_VOL_UP &kp C_NEXT &none
-                &none            &rgb_ug RGB_BRI &rgb_ug RGB_BRD &rgb_ug RGB_TOG &none &none &none &none &rgb_ug RGB_TOG &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none
-                                 &trans           &trans     &trans     &trans     &trans     &trans
+                &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(C)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(C) &kp RG(X) &kp RG(Z) &none
+                &none     &kp LEFT_CONTROL &kp LEFT_ALT &kp LGUI &kp LSHIFT   &none  &none       &kp RSHFT   &kp RIGHT_GUI &kp RALT   &kp RIGHT_CONTROL &trans
+                &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(C)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(C) &kp RG(X) &kp RG(Z) &none
+                          &trans           &trans     &trans     &trans     &trans     &trans
             >;
         };
 
