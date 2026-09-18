@@ -234,7 +234,7 @@
                 &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(V)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
                 &none     &kp LEFT_CONTROL &kp LEFT_ALT &kp LGUI &kp LSHIFT   &none  &none       &kp RSHFT   &kp RIGHT_GUI &kp RALT   &kp RIGHT_CONTROL &trans
                 &none    &kp RG(Z)   &kp RG(X)    &kp RG(C)  &kp RG(V)    &kp RG(RS(Z)) &kp RG(RS(Z)) &kp RG(V) &kp RG(C) &kp RG(X) &kp RG(Z) &none
-                          &trans           &trans     &trans     &trans     &trans     &trans
+                                 &mkp MCLK           &mkp LCLK     &mkp RCLK     &mkp RCLK  &mkp LCLK  &mkp MCLK
             >;
         };
 
