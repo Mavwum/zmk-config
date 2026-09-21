@@ -280,14 +280,14 @@
             display-name = "NUM";
 
             //----------------------------------------------------------------------------
-            //| NONE | [ | 7 | 8 | 9 | ] |     |     |     |     |     | TRANS |
-            //| NONE | ` | 4 | 5 | 6 | = |     | RSHIFT | RGUI | RALT | RCTRL | TRANS |
-            //| NONE | NONE | 1 | 2 | 3 | \ |     | TOG SYM |     |     |     | TRANS |
+            //|   | [ | 7 | 8 | 9 | ] |     |     |     |     |     | TRANS |
+            //|   | ` | 4 | 5 | 6 | = |     | RSHIFT | RGUI | RALT | RCTRL | TRANS |
+            //|   |   | 1 | 2 | 3 | \ |     | TOG SYM |     |     |     | TRANS |
             //| . | 0 | - | TRANS | TRANS | TRANS |
 
             bindings = <
-                &none            &kp LBKT   &kp N7      &kp N8      &kp N9      &kp RBKT   &none       &none       &none       &none       &none       &trans
-                &none            &kp GRAVE  &kp N4      &kp N5      &kp N6      &kp EQUAL  &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &trans
+                &none            &kp LBKT   &kp N7      &kp N8      &kp N9      &kp RBKT   &none       &none       &none       &none       &none       &none
+                &none            &kp GRAVE  &kp N4      &kp N5      &kp N6      &kp EQUAL  &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &none
                 &none            &none       &kp N1      &kp N2      &kp N3      &kp BSLH   &none       &tog 4      &none       &none       &none       &trans
                                  &kp DOT    &kp N0      &kp MINUS   &trans      &trans      &trans
             >;
@@ -303,9 +303,9 @@
             //| ( | ) | _ | TRANS | TRANS | TRANS |
 
             bindings = <
-                &trans           &kp LBRC   &kp AMPS    &kp ASTRK   &kp LPAR    &kp RBRC   &none       &none       &none       &none       &none       &trans
-                &trans           &kp TILDE  &kp DLLR    &kp PRCNT   &kp CARET   &kp PLUS   &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &trans
-                &trans           &none      &kp EXCL    &kp AT      &kp HASH    &kp PIPE   &none       &tog 5      &none       &none       &none       &trans
+                &none           &kp LBRC   &kp AMPS    &kp ASTRK   &kp LPAR    &kp RBRC   &none       &none       &none       &none       &none       &none
+                &none           &kp TILDE  &kp DLLR    &kp PRCNT   &kp CARET   &kp PLUS   &none       &sk RSHFT   &sk RIGHT_GUI &sk RALT   &sk RIGHT_CONTROL &none
+                &none           &none      &kp EXCL    &kp AT      &kp HASH    &kp PIPE   &none       &tog 5      &none       &none       &none       &none
                                  &kp LPAR   &kp RPAR    &kp UNDER   &trans      &trans      &trans
             >;
         };
@@ -320,9 +320,9 @@
             //| DEL | BSPC | ESC | TRANS | TRANS | TRANS |
 
             bindings = <
-                &trans           &kp F12    &kp F7      &kp F8      &kp F9      &kp LS(LG(NUMBER_4)) &none       &none       &none       &none       &none       &trans
-                &trans           &kp F11    &kp F4      &kp F5      &kp F6      &kp SLCK   &none       &sk RIGHT_SHIFT &sk RIGHT_GUI &sk RIGHT_ALT &sk RIGHT_CONTROL &trans
-                &trans           &kp F10    &kp F1      &kp F2      &kp F3      &kp PAUSE_BREAK &none    &tog 6      &none       &none       &none       &trans
+                &none           &kp F12    &kp F7      &kp F8      &kp F9      &kp LS(LG(NUMBER_4)) &none       &none       &none       &none       &none       &none
+                &none           &kp F11    &kp F4      &kp F5      &kp F6      &kp SLCK   &none       &sk RIGHT_SHIFT &sk RIGHT_GUI &sk RIGHT_ALT &sk RIGHT_CONTROL &none
+                &none           &kp F10    &kp F1      &kp F2      &kp F3      &kp PAUSE_BREAK &none    &tog 6      &none       &none       &none       &none
                                  &kp DEL    &kp BACKSPACE &kp ESC    &trans      &trans      &trans
             >;
         };
@@ -352,9 +352,9 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-                &register_matchers &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper LS(LG(P)) &trans
-                &kp LS(LG(NUMBER_4)) &git_log &add_commit &git_diff &hyper F &hyper G &kp LC(LEFT_ARROW) &hyper J &hyper K &kp LC(RIGHT) &trans &trans
-                &trans     &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &trans     &trans &trans &trans
+                &trans &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper LS(LG(P)) &none
+                &register_matchers &git_log &add_commit &git_diff &hyper F &hyper G &kp LC(LEFT_ARROW) &hyper J &hyper K &kp LC(RIGHT) &none &none
+                &none     &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &none     &none &none &none
                                  &trans     &trans     &trans     &trans     &trans     &trans
             >;
         };
