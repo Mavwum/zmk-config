@@ -354,7 +354,7 @@
             bindings = <
                 &register_matchers &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper LS(LG(P)) &trans
                 &kp LS(LG(NUMBER_4)) &git_log &add_commit &git_diff &hyper F &hyper G &kp LC(LEFT_ARROW) &hyper J &hyper K &kp LC(RIGHT) &trans &trans
-                &trans           &trans     &trans     &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &trans     &trans
+                &trans     &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &trans     &trans &trans &trans
                                  &trans     &trans     &trans     &trans     &trans     &trans
             >;
         };
