@@ -121,11 +121,11 @@
             bindings = <&kp DOT>, <&kp COLON>;
         };
 
-        comma_dquote: comma_dquote {
+        comma_quote_dquote: comma_quote_dquote {
             compatible = "zmk,behavior-tap-dance";
-            label = "COMMA_DQUOTE";
+            label = "COMMA_QUOTE_DQUOTE";
             #binding-cells = <0>;
-            bindings = <&kp COMMA>, <&kp DOUBLE_QUOTES>;
+            bindings = <&comma_quote SINGLE_QUOTE COMMA>, <&kp DOUBLE_QUOTES>;
         };
 
         tabs: tabs {
@@ -142,10 +142,10 @@
             bindings = <&kp LG(W)>, <&kp LG(LS(W))>;
         };
 
-        quote_comma_dquote: quote_comma_dquote {
+        comma_quote: comma_quote {
             compatible = "zmk,behavior-hold-tap";
-            label = "QUOTE_COMMA_DQUOTE";
-            bindings = <&kp>, <&comma_dquote>;
+            label = "COMMA_QUOTE";
+            bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
             tapping-term-ms = <200>;
@@ -167,7 +167,7 @@
             //| DEL/LT3 | BSPC/LT1 | ESC/LT2 | RET/LT5 | SPC/LT4 | TAB/LT6 |
 
             bindings = <
-&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe_rctrl RIGHT_CONTROL 0  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &quote_comma_dquote SINGLE_QUOTE 0  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe_rctrl RIGHT_CONTROL 0  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &comma_quote_dquote  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
             >;
         };
 
