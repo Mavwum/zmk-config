@@ -181,7 +181,7 @@
             //| TRANS | TRANS | TRANS | ENTER | SPACE | TAB |
 
             bindings = <
-&none  &none  &none  &kp LC(E)  &none  &tabs  &kp RS(RG(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &none  &none  &sk LEFT_CONTROL  &sk LALT  &sk LEFT_GUI  &sk LSHFT  &none  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT  &none  &none  &none  &none  &none  &windows  &tog 1  &none  &kp LG(LEFT_ARROW)  &kp PAGE_DOWN  &kp RG(PAGE_UP)  &kp LG(RIGHT)  &kp LG(SPACE)  &none  &trans  &trans  &trans  &kp ENTER  &kp SPACE  &kp TAB
+&none  &none  &none  &kp LC(E)  &none  &tabs  &kp RS(RG(Z))  &kp RG(V)  &kp RG(C)  &kp RG(X)  &kp RG(Z)  &none  &none  &sk LEFT_CONTROL  &sk LALT  &sk LEFT_GUI  &sk LSHFT  &none  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp UP_ARROW  &kp RIGHT  &none  &none  &none  &none  &windows  &none  &tog 1  &none  &kp LG(LEFT_ARROW)  &kp PAGE_DOWN  &kp RG(PAGE_UP)  &kp LG(RIGHT)  &kp LG(SPACE)  &none  &trans  &trans  &trans  &kp ENTER  &kp SPACE  &kp TAB
             >;
         };
 
