@@ -125,7 +125,7 @@
             compatible = "zmk,behavior-tap-dance";
             label = "COMMA_QUOTE_DQUOTE";
             #binding-cells = <0>;
-            bindings = <&comma_quote SINGLE_QUOTE COMMA>, <&kp DOUBLE_QUOTES>;
+            bindings = <&kp COMMA>, <&kp DOUBLE_QUOTES>, <&kp SINGLE_QUOTE>;
         };
 
         tabs: tabs {
@@ -140,17 +140,6 @@
             label = "WINDOWS";
             #binding-cells = <0>;
             bindings = <&kp LG(W)>, <&kp LG(LS(W))>;
-        };
-
-        comma_quote: comma_quote {
-            compatible = "zmk,behavior-hold-tap";
-            label = "COMMA_QUOTE";
-            bindings = <&kp>, <&kp>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "tap-preferred";
-            retro-tap;
         };
     };
 };
