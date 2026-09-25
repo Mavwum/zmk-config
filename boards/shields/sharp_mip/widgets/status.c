@@ -91,7 +91,7 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     lv_canvas_draw_rect(canvas, 1, 22, 66, 40, &rect_black_dsc);
 
     char wpm_text[6] = {};
-    snprintf(wpm_text, sizeof(wpm_text), "%d", state->wpm[9]);
+    snprintf(wpm_text, sizeof(wpm_text), "%d", state->wpm[6]);
     lv_canvas_draw_text(canvas, 42, 52, 24, &label_dsc_wpm, wpm_text);
 
     int max = 0;
