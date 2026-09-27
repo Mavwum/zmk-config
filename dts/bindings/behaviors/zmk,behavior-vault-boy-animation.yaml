@@ -1,0 +1,5 @@
+description: Sends WPM updates to the Vault Boy animation on a split peripheral
+
+compatible: "zmk,behavior-vault-boy-animation"
+
+include: one_param.yaml

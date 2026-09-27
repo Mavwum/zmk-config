@@ -6,7 +6,7 @@
  */
 
 #include <zephyr/kernel.h>
-#include <zephyr/random/random.h>
+#include <zephyr/sys/atomic.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -23,10 +23,57 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include "peripheral_status.h"
 
-LV_IMG_DECLARE(balloon);
-LV_IMG_DECLARE(mountain);
+#define VAULT_BOY_FRAME_COUNT 16
+#define VAULT_BOY_STANDING_FRAME 3
+#define VAULT_BOY_IMAGE_WIDTH 95
+#define VAULT_BOY_IMAGE_X ((140 - VAULT_BOY_IMAGE_WIDTH) / 2)
+
+extern const lv_img_dsc_t vault_boy_frames[VAULT_BOY_FRAME_COUNT];
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+static lv_obj_t *art_image;
+static atomic_t latest_wpm;
+static atomic_t last_wpm_update;
+static uint8_t displayed_frame;
+static uint8_t displayed_mode;
+static uint32_t last_frame_update;
+
+void zmk_widget_status_set_wpm(uint8_t wpm) {
+    atomic_set(&latest_wpm, wpm);
+    atomic_set(&last_wpm_update, k_uptime_get_32());
+}
+
+static void update_art(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    uint32_t now = k_uptime_get_32();
+    uint32_t last_update = (uint32_t)atomic_get(&last_wpm_update);
+    uint8_t wpm = (uint8_t)atomic_get(&latest_wpm);
+    uint8_t mode = 0;
+
+    if (wpm > 0 && (uint32_t)(now - last_update) <= 2000) {
+        mode = wpm <= 30 ? 1 : (wpm <= 100 ? 2 : 3);
+    }
+
+    if (mode != displayed_mode) {
+        displayed_mode = mode;
+        displayed_frame = mode == 0 ? VAULT_BOY_STANDING_FRAME : 0;
+        last_frame_update = now;
+        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+        return;
+    }
+
+    if (mode == 0) {
+        return;
+    }
+
+    uint32_t frame_interval = mode == 1 ? 200 : (mode == 2 ? 100 : 50);
+    if ((uint32_t)(now - last_frame_update) >= frame_interval) {
+        displayed_frame = (displayed_frame + 1) % VAULT_BOY_FRAME_COUNT;
+        last_frame_update = now;
+        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    }
+}
 
 struct peripheral_status_state {
     bool connected;
@@ -122,10 +169,13 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, top_pos, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t *art = lv_img_create(widget->obj);
-    bool random = sys_rand32_get() & 1;
-    lv_img_set_src(art, random ? &balloon : &mountain);
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, art_pos, 0);
+    lv_obj_set_style_bg_color(widget->obj, LVGL_BACKGROUND, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_COVER, LV_PART_MAIN);
+    art_image = lv_img_create(widget->obj);
+    displayed_frame = VAULT_BOY_STANDING_FRAME;
+    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    lv_obj_align(art_image, LV_ALIGN_TOP_LEFT, art_pos + VAULT_BOY_IMAGE_X, 0);
+    lv_timer_create(update_art, 25, NULL);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();

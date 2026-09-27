@@ -19,4 +19,12 @@
     chosen {
         zephyr,display = &sharp_mip;
     };
+
+    behaviors {
+        vault_boy_animation: vault_boy_animation {
+            compatible = "zmk,behavior-vault-boy-animation";
+            label = "vault_boy_animation";
+            #binding-cells = <1>;
+        };
+    };
 };

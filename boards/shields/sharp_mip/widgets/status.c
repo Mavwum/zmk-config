@@ -25,6 +25,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/endpoints.h>
 #include <zmk/keymap.h>
 #include <zmk/wpm.h>
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+#include <zmk/split/central.h>
+#endif
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -299,6 +302,17 @@ static void set_wpm_status(struct zmk_widget_status *widget, struct wpm_status_s
 static void wpm_status_update_cb(struct wpm_status_state state) {
     struct zmk_widget_status *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_wpm_status(widget, state); }
+
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+    for (uint8_t source = 0; source < ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT; source++) {
+        struct zmk_behavior_binding binding = {
+            .behavior_dev = "vault_boy_animation",
+            .param1 = state.wpm,
+        };
+        struct zmk_behavior_binding_event event = {.timestamp = k_uptime_get()};
+        zmk_split_central_invoke_behavior(source, &binding, event, true);
+    }
+#endif
 }
 
 struct wpm_status_state wpm_status_get_state(const zmk_event_t *eh) {
