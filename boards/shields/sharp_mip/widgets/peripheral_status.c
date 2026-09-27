@@ -6,7 +6,6 @@
  */
 
 #include <zephyr/kernel.h>
-#include <zephyr/random/random.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -16,6 +15,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/battery_state_changed.h>
+#include <zmk/events/position_state_changed.h>
 #include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/events/split_peripheral_status_changed.h>
 #include <zmk/usb.h>
@@ -23,10 +23,80 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include "peripheral_status.h"
 
-LV_IMG_DECLARE(balloon);
-LV_IMG_DECLARE(mountain);
+#define VAULT_BOY_FRAME_COUNT 16
+#define VAULT_BOY_STANDING_FRAME 3
+#define VAULT_BOY_IMAGE_WIDTH 95
+#define VAULT_BOY_IMAGE_X ((140 - VAULT_BOY_IMAGE_WIDTH) / 2)
+#define VAULT_BOY_IDLE_TIMEOUT_MS 2000
+#define VAULT_BOY_MIN_FRAME_INTERVAL_MS 100
+
+extern const lv_img_dsc_t vault_boy_frames[VAULT_BOY_FRAME_COUNT];
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+static lv_obj_t *art_image;
+static lv_timer_t *idle_timer;
+static uint32_t previous_key_down;
+static bool has_previous_key_down;
+static uint8_t displayed_frame;
+static uint8_t displayed_mode;
+static uint32_t last_frame_update;
+
+struct typing_activity_state {
+    bool pressed;
+};
+
+static struct typing_activity_state typing_activity_get_state(const zmk_event_t *eh) {
+    if (eh == NULL) {
+        return (struct typing_activity_state){0};
+    }
+
+    const struct zmk_position_state_changed *event = as_zmk_position_state_changed(eh);
+    return (struct typing_activity_state){.pressed = event != NULL && event->state};
+}
+
+static void typing_activity_update_cb(struct typing_activity_state state) {
+    if (!state.pressed) {
+        return;
+    }
+
+    uint32_t now = k_uptime_get_32();
+    uint32_t interval = now - previous_key_down;
+    uint8_t mode = !has_previous_key_down || interval > VAULT_BOY_IDLE_TIMEOUT_MS
+                       ? 1
+                       : (interval < 120 ? 3 : (interval < 400 ? 2 : 1));
+
+    previous_key_down = now;
+    has_previous_key_down = true;
+
+    bool update_frame = mode != displayed_mode;
+    if (update_frame) {
+        displayed_mode = mode;
+        displayed_frame = 0;
+    } else if ((uint32_t)(now - last_frame_update) >= VAULT_BOY_MIN_FRAME_INTERVAL_MS) {
+        displayed_frame = (displayed_frame + 1) % VAULT_BOY_FRAME_COUNT;
+        update_frame = true;
+    }
+
+    if (update_frame) {
+        last_frame_update = now;
+        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    }
+    lv_timer_reset(idle_timer);
+    lv_timer_resume(idle_timer);
+}
+
+ZMK_DISPLAY_WIDGET_LISTENER(vault_boy_activity, struct typing_activity_state,
+                            typing_activity_update_cb, typing_activity_get_state)
+ZMK_SUBSCRIPTION(vault_boy_activity, zmk_position_state_changed);
+
+static void set_standing(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    displayed_mode = 0;
+    displayed_frame = VAULT_BOY_STANDING_FRAME;
+    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    lv_timer_pause(idle_timer);
+}
 
 struct peripheral_status_state {
     bool connected;
@@ -122,14 +192,19 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, top_pos, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t *art = lv_img_create(widget->obj);
-    bool random = sys_rand32_get() & 1;
-    lv_img_set_src(art, random ? &balloon : &mountain);
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, art_pos, 0);
+    lv_obj_set_style_bg_color(widget->obj, LVGL_BACKGROUND, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_COVER, LV_PART_MAIN);
+    art_image = lv_img_create(widget->obj);
+    displayed_frame = VAULT_BOY_STANDING_FRAME;
+    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    lv_obj_align(art_image, LV_ALIGN_TOP_LEFT, art_pos + VAULT_BOY_IMAGE_X, 0);
+    idle_timer = lv_timer_create(set_standing, VAULT_BOY_IDLE_TIMEOUT_MS, NULL);
+    lv_timer_pause(idle_timer);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
     widget_peripheral_status_init();
+    vault_boy_activity_init();
 
     return 0;
 }
