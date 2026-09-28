@@ -265,7 +265,7 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &register_matchers  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &none  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &register_matchers  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
