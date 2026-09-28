@@ -50,15 +50,6 @@
             label = "ADD_COMMIT";
         };
 
-        register_matchers: register_matchers {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&none &kp F &kp I &kp N &kp D &kp SPACE &kp DOT &kp FSLH &kp SPACE &kp MINUS &kp T &kp Y &kp P &kp E &kp SPACE &kp F &kp SPACE &kp MINUS &kp N &kp A &kp M &kp E &kp SPACE &kp STAR &kp DOT &kp H &kp T &kp T &kp P &kp SPACE &kp MINUS &kp E &kp X &kp E &kp C &kp SPACE &kp I &kp J &kp H &kp T &kp T &kp P &kp SPACE &kp MINUS &kp LS(V) &kp SPACE &kp D &kp E &kp L &kp A &kp Y &kp EQUAL &kp N5 &kp N0 &kp N0 &kp SPACE &kp MINUS &kp LS(V) &kp SPACE &kp A &kp P &kp P &kp MINUS &kp V &kp E &kp R &kp S &kp I &kp O &kp N &kp EQUAL &kp N5 &kp DOT &kp N6 &kp DOT &kp N0 &kp SPACE &kp LBRC &kp RBRC &kp SPACE &kp PLUS>;
-            label = "REGISTER_MATCHERS";
-            wait-ms = <30>;
-            tap-ms = <30>;
-        };
-
         git_log: git_log {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -267,7 +258,7 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &none  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &register_matchers  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &none  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
