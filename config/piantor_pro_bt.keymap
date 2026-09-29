@@ -100,17 +100,6 @@
     };
 
     behaviors {
-        oe_rctrl: oe_rctrl {
-            compatible = "zmk,behavior-hold-tap";
-            label = "OE_RCTRL";
-            bindings = <&kp>, <&oe>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "tap-preferred";
-            require-prior-idle-ms = <125>;
-        };
-
         dot_colon: dot_colon {
             compatible = "zmk,behavior-tap-dance";
             label = "DOT_COLON";
@@ -148,7 +137,7 @@
             //| DEL/LT3 | BSPC/LT1 | ESC/LT2 | RET/LT5 | SPC/LT4 | TAB/LT6 |
 
             bindings = <
-&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe_rctrl RIGHT_CONTROL 0  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
             >;
         };
 
