@@ -16,6 +16,8 @@
 &mt {
     flavor = "tap-preferred";
     tapping-term-ms = <200>;
+    quick-tap-ms = <150>;
+    hold-while-undecided;
 };
 
 / {
@@ -27,6 +29,8 @@
             #binding-cells = <0>;
             bindings = <&kp DOUBLE_QUOTES &kp A>;
             label = "AE";
+            wait-ms = <5>;
+            tap-ms = <5>;
         };
 
         oe: oe {
@@ -34,6 +38,8 @@
             #binding-cells = <0>;
             bindings = <&kp DOUBLE_QUOTES &kp O>;
             label = "OE";
+            wait-ms = <5>;
+            tap-ms = <5>;
         };
 
         ue: ue {
@@ -41,6 +47,8 @@
             #binding-cells = <0>;
             bindings = <&kp DOUBLE_QUOTES &kp U>;
             label = "UE";
+            wait-ms = <5>;
+            tap-ms = <5>;
         };
 
         add_commit: add_commit {
@@ -48,13 +56,6 @@
             #binding-cells = <0>;
             bindings = <&kp G &kp I &kp T &kp SPACE &kp A &kp D &kp D &kp SPACE &kp DOT &kp SPACE &kp AMPS &kp AMPS &kp SPACE &kp G &kp I &kp T &kp SPACE &kp C &kp O &kp M &kp M &kp I &kp T>;
             label = "ADD_COMMIT";
-        };
-
-        register_matchers: register_matchers {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&none &kp F &kp I &kp N &kp D &kp SPACE &kp DOT &kp FSLH &kp SPACE &kp MINUS &kp T &kp Y &kp P &kp E &kp SPACE &kp F &kp SPACE &kp MINUS &kp N &kp A &kp M &kp E &kp SPACE &kp STAR &kp DOT &kp H &kp T &kp T &kp P &kp SPACE &kp MINUS &kp E &kp X &kp E &kp C &kp SPACE &kp I &kp J &kp H &kp T &kp T &kp P &kp SPACE &kp MINUS &kp LS(V) &kp SPACE &kp D &kp E &kp L &kp A &kp Y &kp EQUAL &kp N5 &kp N0 &kp N0 &kp SPACE &kp MINUS &kp LS(V) &kp SPACE &kp A &kp P &kp P &kp MINUS &kp V &kp E &kp R &kp S &kp I &kp O &kp N &kp EQUAL &kp N5 &kp DOT &kp N6 &kp DOT &kp N0 &kp SPACE &kp LBRC &kp RBRC &kp SPACE &kp PLUS>;
-            label = "REGISTER_MATCHERS";
         };
 
         git_log: git_log {
@@ -101,28 +102,11 @@
     };
 
     behaviors {
-        oe_rctrl: oe_rctrl {
-            compatible = "zmk,behavior-hold-tap";
-            label = "OE_RCTRL";
-            bindings = <&kp>, <&oe>;
-
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            flavor = "tap-preferred";
-        };
-
         dot_colon: dot_colon {
             compatible = "zmk,behavior-tap-dance";
             label = "DOT_COLON";
             #binding-cells = <0>;
             bindings = <&kp DOT>, <&kp COLON>;
-        };
-
-        comma_quote_dquote: comma_quote_dquote {
-            compatible = "zmk,behavior-tap-dance";
-            label = "COMMA_QUOTE_DQUOTE";
-            #binding-cells = <0>;
-            bindings = <&kp COMMA>, <&kp DOUBLE_QUOTES>, <&kp SINGLE_QUOTE>;
         };
 
         tabs: tabs {
@@ -137,6 +121,32 @@
             label = "WINDOWS";
             #binding-cells = <0>;
             bindings = <&kp LG(W)>, <&kp LG(LS(W))>;
+        };
+
+        ls_f: ls_f {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LS_F";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            hold-while-undecided;
+            hold-trigger-key-positions = <6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41>;
+            quick-tap-ms = <150>;
+        };
+
+        rs_j: rs_j {
+            compatible = "zmk,behavior-hold-tap";
+            label = "RS_J";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            hold-while-undecided;
+            quick-tap-ms = <150>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38>;
         };
     };
 };
@@ -155,7 +165,7 @@
             //| DEL/LT3 | BSPC/LT1 | ESC/LT2 | RET/LT5 | SPC/LT4 | TAB/LT6 |
 
             bindings = <
-&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe_rctrl RIGHT_CONTROL 0  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &comma_quote_dquote  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &ls_f LSHFT F  &kp G  &kp H  &rs_j RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
             >;
         };
 
@@ -239,7 +249,7 @@
             //| DEL | BSPC | ESC | TRANS | TRANS | TRANS |
 
             bindings = <
-&none  &kp F12  &kp F7  &kp F8  &kp F9  &kp LS(LG(NUMBER_4))  &none  &none  &none  &none  &none  &none  &none  &kp F11  &kp F4  &kp F5  &kp F6  &kp SLCK  &none  &sk RIGHT_SHIFT  &sk RIGHT_GUI  &sk RIGHT_ALT  &sk RIGHT_CONTROL  &none  &none  &kp F10  &kp F1  &kp F2  &kp F3  &kp PAUSE_BREAK  &none  &tog 6  &none  &none  &none  &none  &kp DEL  &kp BACKSPACE  &kp ESC  &trans  &trans  &trans
+&none  &kp F12  &kp F7  &kp F8  &kp F9  &kp LS(LG(NUMBER_4))  &none  &none  &none  &none  &none  &bootloader  &none  &kp F11  &kp F4  &kp F5  &kp F6  &kp SLCK  &none  &sk RIGHT_SHIFT  &sk RIGHT_GUI  &sk RIGHT_ALT  &sk RIGHT_CONTROL  &sys_reset  &none  &kp F10  &kp F1  &kp F2  &kp F3  &kp PAUSE_BREAK  &none  &tog 6  &none  &none  &none  &studio_unlock  &kp DEL  &kp BACKSPACE  &kp ESC  &trans  &trans  &trans
             >;
         };
 
@@ -265,7 +275,7 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &register_matchers  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &none  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &kp LC(LEFT_ARROW)  &hyper J  &hyper K  &kp LC(RIGHT)  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
