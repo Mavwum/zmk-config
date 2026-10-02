@@ -24,8 +24,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "peripheral_status.h"
 
 #define VAULT_BOY_FRAME_COUNT 18
-#define VAULT_BOY_STANDING_FRAME 3
+#define VAULT_BOY_STANDING_FRAME 0
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
+#define VAULT_BOY_MODE_CONFIRMATION_COUNT 3
 #define VAULT_BOY_WALK_FRAME_INTERVAL_MS 200
 #define VAULT_BOY_RUN_FRAME_INTERVAL_MS 150
 #define VAULT_BOY_SPRINT_FRAME_INTERVAL_MS 100
@@ -41,6 +42,8 @@ static bool has_previous_key_down;
 static bool animation_active;
 static uint8_t displayed_frame;
 static uint8_t displayed_mode;
+static uint8_t pending_mode;
+static uint8_t pending_mode_samples;
 
 struct typing_activity_state {
     bool pressed;
@@ -53,6 +56,17 @@ static struct typing_activity_state typing_activity_get_state(const zmk_event_t 
 
     const struct zmk_position_state_changed *event = as_zmk_position_state_changed(eh);
     return (struct typing_activity_state){.pressed = event != NULL && event->state};
+}
+
+static void set_animation_mode(uint8_t mode) {
+    displayed_mode = mode;
+    displayed_frame = 0;
+    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+
+    uint32_t frame_interval = mode == 1   ? VAULT_BOY_WALK_FRAME_INTERVAL_MS
+                              : mode == 2 ? VAULT_BOY_RUN_FRAME_INTERVAL_MS
+                                          : VAULT_BOY_SPRINT_FRAME_INTERVAL_MS;
+    lv_timer_set_period(animation_timer, frame_interval);
 }
 
 static void typing_activity_update_cb(struct typing_activity_state state) {
@@ -69,14 +83,26 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     previous_key_down = now;
     has_previous_key_down = true;
 
-    if (mode != displayed_mode) {
-        displayed_mode = mode;
-        displayed_frame = 0;
-        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
-        uint32_t frame_interval = mode == 1   ? VAULT_BOY_WALK_FRAME_INTERVAL_MS
-                                  : mode == 2 ? VAULT_BOY_RUN_FRAME_INTERVAL_MS
-                                              : VAULT_BOY_SPRINT_FRAME_INTERVAL_MS;
-        lv_timer_set_period(animation_timer, frame_interval);
+    if (displayed_mode == 0) {
+        pending_mode = 0;
+        pending_mode_samples = 0;
+        set_animation_mode(mode);
+    } else if (mode == displayed_mode) {
+        pending_mode = 0;
+        pending_mode_samples = 0;
+    } else {
+        if (mode != pending_mode) {
+            pending_mode = mode;
+            pending_mode_samples = 1;
+        } else if (pending_mode_samples < VAULT_BOY_MODE_CONFIRMATION_COUNT) {
+            pending_mode_samples++;
+        }
+
+        if (pending_mode_samples >= VAULT_BOY_MODE_CONFIRMATION_COUNT) {
+            set_animation_mode(mode);
+            pending_mode = 0;
+            pending_mode_samples = 0;
+        }
     }
 
     if (!animation_active) {
@@ -97,6 +123,9 @@ static void set_standing(lv_timer_t *timer) {
     displayed_mode = 0;
     animation_active = false;
     displayed_frame = VAULT_BOY_STANDING_FRAME;
+    has_previous_key_down = false;
+    pending_mode = 0;
+    pending_mode_samples = 0;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
     lv_timer_pause(idle_timer);
     lv_timer_pause(animation_timer);
