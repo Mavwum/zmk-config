@@ -3880,23 +3880,14 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_VAULT_BOY
 #endif
 };
 
-const lv_img_dsc_t vault_boy_frames[18] = {
+const lv_img_dsc_t vault_boy_frames[9] = {
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_00_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_01_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_02_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_03_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_04_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_05_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_06_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_07_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_08_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_09_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_10_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_11_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_12_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_13_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_14_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_15_map },
     { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_16_map },
-    { .header.cf = LV_IMG_CF_INDEXED_1BIT, .header.always_zero = 0, .header.reserved = 0, .header.w = 140, .header.h = 68, .data_size = 1232, .data = vault_boy_frame_17_map },
 };
