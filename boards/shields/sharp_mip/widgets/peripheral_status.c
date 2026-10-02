@@ -24,7 +24,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "peripheral_status.h"
 
 #define VAULT_BOY_FRAME_COUNT 9
-#define VAULT_BOY_SPEED_SAMPLE_COUNT 6
+#define VAULT_BOY_SPEED_SAMPLE_COUNT 7
 #define VAULT_BOY_STANDING_FRAME 0
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
 #define VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS 240
@@ -41,7 +41,6 @@ static lv_timer_t *idle_timer;
 static lv_timer_t *animation_timer;
 static uint32_t previous_key_down;
 static uint32_t key_interval_samples[VAULT_BOY_SPEED_SAMPLE_COUNT];
-static uint32_t key_interval_sum;
 static bool has_previous_key_down;
 static bool animation_active;
 static uint8_t displayed_frame;
@@ -71,6 +70,29 @@ static void set_animation_mode(uint8_t mode) {
     lv_timer_set_period(animation_timer, frame_interval);
 }
 
+static uint32_t get_median_key_interval(void) {
+    if (key_interval_sample_count == 0) {
+        return 0;
+    }
+
+    uint32_t sorted_samples[VAULT_BOY_SPEED_SAMPLE_COUNT];
+    for (uint8_t sample_index = 0; sample_index < key_interval_sample_count; sample_index++) {
+        sorted_samples[sample_index] = key_interval_samples[sample_index];
+    }
+
+    for (uint8_t sample_index = 1; sample_index < key_interval_sample_count; sample_index++) {
+        uint32_t current_sample = sorted_samples[sample_index];
+        uint8_t insertion_index = sample_index;
+        while (insertion_index > 0 && sorted_samples[insertion_index - 1] > current_sample) {
+            sorted_samples[insertion_index] = sorted_samples[insertion_index - 1];
+            insertion_index--;
+        }
+        sorted_samples[insertion_index] = current_sample;
+    }
+
+    return sorted_samples[key_interval_sample_count / 2];
+}
+
 static void typing_activity_update_cb(struct typing_activity_state state) {
     if (!state.pressed) {
         return;
@@ -80,29 +102,23 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     uint32_t interval = now - previous_key_down;
     bool reset_speed = !has_previous_key_down || interval > VAULT_BOY_IDLE_TIMEOUT_MS;
     if (reset_speed) {
-        key_interval_sum = 0;
         key_interval_sample_count = 0;
         next_key_interval_sample = 0;
     } else {
-        if (key_interval_sample_count == VAULT_BOY_SPEED_SAMPLE_COUNT) {
-            key_interval_sum -= key_interval_samples[next_key_interval_sample];
-        } else {
+        if (key_interval_sample_count < VAULT_BOY_SPEED_SAMPLE_COUNT) {
             key_interval_sample_count++;
         }
 
         key_interval_samples[next_key_interval_sample] = interval;
-        key_interval_sum += interval;
         next_key_interval_sample =
             (next_key_interval_sample + 1) % VAULT_BOY_SPEED_SAMPLE_COUNT;
     }
 
-    uint32_t average_key_interval = key_interval_sample_count == 0
-                                        ? 0
-                                        : key_interval_sum / key_interval_sample_count;
+    uint32_t median_key_interval = get_median_key_interval();
     uint8_t mode = reset_speed ? 1
-                       : (average_key_interval < VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS
+                       : (median_key_interval < VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS
                                       ? 3
-                           : (average_key_interval < VAULT_BOY_RUN_INTERVAL_THRESHOLD_MS
+                           : (median_key_interval < VAULT_BOY_RUN_INTERVAL_THRESHOLD_MS
                                ? 2
                                : 1));
 
@@ -132,7 +148,6 @@ static void set_standing(lv_timer_t *timer) {
     animation_active = false;
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     has_previous_key_down = false;
-    key_interval_sum = 0;
     key_interval_sample_count = 0;
     next_key_interval_sample = 0;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
