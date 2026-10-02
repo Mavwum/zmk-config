@@ -16,6 +16,8 @@
 &mt {
     flavor = "tap-preferred";
     tapping-term-ms = <200>;
+    quick-tap-ms = <150>;
+    hold-while-undecided;
 };
 
 / {
@@ -120,6 +122,32 @@
             #binding-cells = <0>;
             bindings = <&kp LG(W)>, <&kp LG(LS(W))>;
         };
+
+        ls_f: ls_f {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LS_F";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            hold-while-undecided;
+            hold-trigger-key-positions = <6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 39 40 41>;
+            quick-tap-ms = <150>;
+        };
+
+        rs_j: rs_j {
+            compatible = "zmk,behavior-hold-tap";
+            label = "RS_J";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            hold-while-undecided;
+            quick-tap-ms = <150>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38>;
+        };
     };
 };
 
@@ -137,7 +165,7 @@
             //| DEL/LT3 | BSPC/LT1 | ESC/LT2 | RET/LT5 | SPC/LT4 | TAB/LT6 |
 
             bindings = <
-&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &mt LSHFT F  &kp G  &kp H  &mt RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
+&kp LG(TAB)  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Z  &kp U  &kp I  &kp O  &kp P  &ue  &kp LG(GRAVE)  &mt LEFT_CONTROL A  &mt LALT S  &mt LEFT_GUI D  &ls_f LSHFT F  &kp G  &kp H  &rs_j RSHFT J  &mt RIGHT_GUI K  &mt RALT L  &oe  &ae  &sl 8  &lt 7 Y  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &dot_colon  &lt 7 SLASH  &sl 8  &lt 3 DELETE  &lt 1 BACKSPACE  &lt 2 ESC  &lt 5 RET  &lt 4 SPACE  &lt 6 TAB
             >;
         };
 
