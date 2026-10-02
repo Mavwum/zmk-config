@@ -26,6 +26,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define VAULT_BOY_FRAME_COUNT 18
 #define VAULT_BOY_STANDING_FRAME 0
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
+#define VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS 240
+#define VAULT_BOY_RUN_INTERVAL_THRESHOLD_MS 800
 #define VAULT_BOY_WALK_FRAME_INTERVAL_MS 200
 #define VAULT_BOY_RUN_FRAME_INTERVAL_MS 100
 #define VAULT_BOY_SPRINT_FRAME_INTERVAL_MS 50
@@ -58,8 +60,6 @@ static struct typing_activity_state typing_activity_get_state(const zmk_event_t 
 
 static void set_animation_mode(uint8_t mode) {
     displayed_mode = mode;
-    displayed_frame = 0;
-    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
 
     uint32_t frame_interval = mode == 1   ? VAULT_BOY_WALK_FRAME_INTERVAL_MS
                               : mode == 2 ? VAULT_BOY_RUN_FRAME_INTERVAL_MS
@@ -84,9 +84,11 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     }
 
     uint8_t mode = reset_speed ? 1
-                               : (average_key_interval < 120
+                       : (average_key_interval < VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS
                                       ? 3
-                                      : (average_key_interval < 400 ? 2 : 1));
+                           : (average_key_interval < VAULT_BOY_RUN_INTERVAL_THRESHOLD_MS
+                               ? 2
+                               : 1));
 
     previous_key_down = now;
     has_previous_key_down = true;
