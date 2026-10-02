@@ -23,23 +23,24 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include "peripheral_status.h"
 
-#define VAULT_BOY_FRAME_COUNT 16
+#define VAULT_BOY_FRAME_COUNT 18
 #define VAULT_BOY_STANDING_FRAME 3
-#define VAULT_BOY_IMAGE_WIDTH 95
-#define VAULT_BOY_IMAGE_X ((140 - VAULT_BOY_IMAGE_WIDTH) / 2)
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
-#define VAULT_BOY_MIN_FRAME_INTERVAL_MS 100
+#define VAULT_BOY_WALK_FRAME_INTERVAL_MS 200
+#define VAULT_BOY_RUN_FRAME_INTERVAL_MS 150
+#define VAULT_BOY_SPRINT_FRAME_INTERVAL_MS 100
 
 extern const lv_img_dsc_t vault_boy_frames[VAULT_BOY_FRAME_COUNT];
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 static lv_obj_t *art_image;
 static lv_timer_t *idle_timer;
+static lv_timer_t *animation_timer;
 static uint32_t previous_key_down;
 static bool has_previous_key_down;
+static bool animation_active;
 static uint8_t displayed_frame;
 static uint8_t displayed_mode;
-static uint32_t last_frame_update;
 
 struct typing_activity_state {
     bool pressed;
@@ -68,18 +69,19 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     previous_key_down = now;
     has_previous_key_down = true;
 
-    bool update_frame = mode != displayed_mode;
-    if (update_frame) {
+    if (mode != displayed_mode) {
         displayed_mode = mode;
         displayed_frame = 0;
-    } else if ((uint32_t)(now - last_frame_update) >= VAULT_BOY_MIN_FRAME_INTERVAL_MS) {
-        displayed_frame = (displayed_frame + 1) % VAULT_BOY_FRAME_COUNT;
-        update_frame = true;
+        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+        uint32_t frame_interval = mode == 1   ? VAULT_BOY_WALK_FRAME_INTERVAL_MS
+                                  : mode == 2 ? VAULT_BOY_RUN_FRAME_INTERVAL_MS
+                                              : VAULT_BOY_SPRINT_FRAME_INTERVAL_MS;
+        lv_timer_set_period(animation_timer, frame_interval);
     }
 
-    if (update_frame) {
-        last_frame_update = now;
-        lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
+    if (!animation_active) {
+        animation_active = true;
+        lv_timer_resume(animation_timer);
     }
     lv_timer_reset(idle_timer);
     lv_timer_resume(idle_timer);
@@ -93,9 +95,18 @@ static void set_standing(lv_timer_t *timer) {
     ARG_UNUSED(timer);
 
     displayed_mode = 0;
+    animation_active = false;
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
     lv_timer_pause(idle_timer);
+    lv_timer_pause(animation_timer);
+}
+
+static void advance_animation(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    displayed_frame = (displayed_frame + 1) % VAULT_BOY_FRAME_COUNT;
+    lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
 }
 
 struct peripheral_status_state {
@@ -197,9 +208,11 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     art_image = lv_img_create(widget->obj);
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
-    lv_obj_align(art_image, LV_ALIGN_TOP_LEFT, art_pos + VAULT_BOY_IMAGE_X, 0);
+    lv_obj_align(art_image, LV_ALIGN_TOP_LEFT, art_pos, 0);
     idle_timer = lv_timer_create(set_standing, VAULT_BOY_IDLE_TIMEOUT_MS, NULL);
     lv_timer_pause(idle_timer);
+    animation_timer = lv_timer_create(advance_animation, 200, NULL);
+    lv_timer_pause(animation_timer);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
