@@ -24,6 +24,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "peripheral_status.h"
 
 #define VAULT_BOY_FRAME_COUNT 9
+#define VAULT_BOY_SPEED_SAMPLE_COUNT 6
 #define VAULT_BOY_STANDING_FRAME 0
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
 #define VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS 240
@@ -39,11 +40,14 @@ static lv_obj_t *art_image;
 static lv_timer_t *idle_timer;
 static lv_timer_t *animation_timer;
 static uint32_t previous_key_down;
-static uint32_t average_key_interval;
+static uint32_t key_interval_samples[VAULT_BOY_SPEED_SAMPLE_COUNT];
+static uint32_t key_interval_sum;
 static bool has_previous_key_down;
 static bool animation_active;
 static uint8_t displayed_frame;
 static uint8_t displayed_mode;
+static uint8_t key_interval_sample_count;
+static uint8_t next_key_interval_sample;
 
 struct typing_activity_state {
     bool pressed;
@@ -76,13 +80,25 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     uint32_t interval = now - previous_key_down;
     bool reset_speed = !has_previous_key_down || interval > VAULT_BOY_IDLE_TIMEOUT_MS;
     if (reset_speed) {
-        average_key_interval = 0;
-    } else if (average_key_interval == 0) {
-        average_key_interval = interval;
+        key_interval_sum = 0;
+        key_interval_sample_count = 0;
+        next_key_interval_sample = 0;
     } else {
-        average_key_interval = (average_key_interval + interval) / 2;
+        if (key_interval_sample_count == VAULT_BOY_SPEED_SAMPLE_COUNT) {
+            key_interval_sum -= key_interval_samples[next_key_interval_sample];
+        } else {
+            key_interval_sample_count++;
+        }
+
+        key_interval_samples[next_key_interval_sample] = interval;
+        key_interval_sum += interval;
+        next_key_interval_sample =
+            (next_key_interval_sample + 1) % VAULT_BOY_SPEED_SAMPLE_COUNT;
     }
 
+    uint32_t average_key_interval = key_interval_sample_count == 0
+                                        ? 0
+                                        : key_interval_sum / key_interval_sample_count;
     uint8_t mode = reset_speed ? 1
                        : (average_key_interval < VAULT_BOY_SPRINT_INTERVAL_THRESHOLD_MS
                                       ? 3
@@ -116,7 +132,9 @@ static void set_standing(lv_timer_t *timer) {
     animation_active = false;
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     has_previous_key_down = false;
-    average_key_interval = 0;
+    key_interval_sum = 0;
+    key_interval_sample_count = 0;
+    next_key_interval_sample = 0;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
     lv_timer_pause(idle_timer);
     lv_timer_pause(animation_timer);
