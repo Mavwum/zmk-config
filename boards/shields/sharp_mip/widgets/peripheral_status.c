@@ -26,7 +26,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define VAULT_BOY_FRAME_COUNT 18
 #define VAULT_BOY_STANDING_FRAME 0
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
-#define VAULT_BOY_MODE_CONFIRMATION_COUNT 3
 #define VAULT_BOY_WALK_FRAME_INTERVAL_MS 200
 #define VAULT_BOY_RUN_FRAME_INTERVAL_MS 150
 #define VAULT_BOY_SPRINT_FRAME_INTERVAL_MS 100
@@ -38,12 +37,11 @@ static lv_obj_t *art_image;
 static lv_timer_t *idle_timer;
 static lv_timer_t *animation_timer;
 static uint32_t previous_key_down;
+static uint32_t average_key_interval;
 static bool has_previous_key_down;
 static bool animation_active;
 static uint8_t displayed_frame;
 static uint8_t displayed_mode;
-static uint8_t pending_mode;
-static uint8_t pending_mode_samples;
 
 struct typing_activity_state {
     bool pressed;
@@ -76,33 +74,25 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
 
     uint32_t now = k_uptime_get_32();
     uint32_t interval = now - previous_key_down;
-    uint8_t mode = !has_previous_key_down || interval > VAULT_BOY_IDLE_TIMEOUT_MS
-                       ? 1
-                       : (interval < 120 ? 3 : (interval < 400 ? 2 : 1));
+    bool reset_speed = !has_previous_key_down || interval > VAULT_BOY_IDLE_TIMEOUT_MS;
+    if (reset_speed) {
+        average_key_interval = 0;
+    } else if (average_key_interval == 0) {
+        average_key_interval = interval;
+    } else {
+        average_key_interval = (average_key_interval + interval) / 2;
+    }
+
+    uint8_t mode = reset_speed ? 1
+                               : (average_key_interval < 120
+                                      ? 3
+                                      : (average_key_interval < 400 ? 2 : 1));
 
     previous_key_down = now;
     has_previous_key_down = true;
 
-    if (displayed_mode == 0) {
-        pending_mode = 0;
-        pending_mode_samples = 0;
+    if (mode != displayed_mode) {
         set_animation_mode(mode);
-    } else if (mode == displayed_mode) {
-        pending_mode = 0;
-        pending_mode_samples = 0;
-    } else {
-        if (mode != pending_mode) {
-            pending_mode = mode;
-            pending_mode_samples = 1;
-        } else if (pending_mode_samples < VAULT_BOY_MODE_CONFIRMATION_COUNT) {
-            pending_mode_samples++;
-        }
-
-        if (pending_mode_samples >= VAULT_BOY_MODE_CONFIRMATION_COUNT) {
-            set_animation_mode(mode);
-            pending_mode = 0;
-            pending_mode_samples = 0;
-        }
     }
 
     if (!animation_active) {
@@ -124,8 +114,7 @@ static void set_standing(lv_timer_t *timer) {
     animation_active = false;
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     has_previous_key_down = false;
-    pending_mode = 0;
-    pending_mode_samples = 0;
+    average_key_interval = 0;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
     lv_timer_pause(idle_timer);
     lv_timer_pause(animation_timer);
