@@ -23,34 +23,50 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include "peripheral_status.h"
 
+/* Number of frames in the animation cycle. */
 #define VAULT_BOY_FRAME_COUNT 9
+/* Index of the standing frame in the image array. */
 #define VAULT_BOY_STANDING_FRAME 0
+/* Idle time before the current cycle is allowed to finish. */
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
+/* Delay between frames; 9 frames make one cycle take about one second. */
 #define VAULT_BOY_WALK_FRAME_INTERVAL_MS 111
 
+/* Frame descriptors are defined in art.c and exposed through this array. */
 extern const lv_img_dsc_t vault_boy_frames[VAULT_BOY_FRAME_COUNT];
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+/* LVGL image object that displays the current frame. */
 static lv_obj_t *art_image;
+/* Timer that waits for the idle timeout after the last key press. */
 static lv_timer_t *idle_timer;
+/* Timer that calls advance_animation() at each frame interval. */
 static lv_timer_t *animation_timer;
+/* True while the animation timer is advancing frames. */
 static bool animation_active;
+/* When true, stop after the animation returns to frame 0. */
 static bool stop_after_cycle;
+/* Zero-based array index of the displayed frame, not its memory address. */
 static uint8_t displayed_frame;
 
+/* State passed through the ZMK listener; true means a key is pressed. */
 struct typing_activity_state {
     bool pressed;
 };
 
+/* Converts the ZMK event (eh) into a simple pressed state. */
 static struct typing_activity_state typing_activity_get_state(const zmk_event_t *eh) {
     if (eh == NULL) {
         return (struct typing_activity_state){0};
     }
 
+    /* Points to the key-position data carried by the ZMK event. */
     const struct zmk_position_state_changed *event = as_zmk_position_state_changed(eh);
     return (struct typing_activity_state){.pressed = event != NULL && event->state};
 }
 
+/* state contains the detected key state. On a key press, start the animation if needed,
+ * reset the idle countdown, and cancel a pending stop if typing resumes before cycle end. */
 static void typing_activity_update_cb(struct typing_activity_state state) {
     if (!state.pressed) {
         return;
@@ -65,10 +81,13 @@ static void typing_activity_update_cb(struct typing_activity_state state) {
     lv_timer_resume(idle_timer);
 }
 
+/* Registers the callback for keyboard events; ZMK generates vault_boy_activity_init(). */
 ZMK_DISPLAY_WIDGET_LISTENER(vault_boy_activity, struct typing_activity_state,
                             typing_activity_update_cb, typing_activity_get_state)
+/* Notify this listener when a key position state changes. */
 ZMK_SUBSCRIPTION(vault_boy_activity, zmk_position_state_changed);
 
+/* Called by the expired idle timer; schedule stopping at the end of the cycle. */
 static void request_stop_after_cycle(lv_timer_t *timer) {
     ARG_UNUSED(timer);
 
@@ -76,6 +95,7 @@ static void request_stop_after_cycle(lv_timer_t *timer) {
     lv_timer_pause(idle_timer);
 }
 
+/* Display the standing frame and pause both timers. */
 static void set_standing(lv_timer_t *timer) {
     ARG_UNUSED(timer);
 
@@ -87,6 +107,7 @@ static void set_standing(lv_timer_t *timer) {
     lv_timer_pause(animation_timer);
 }
 
+/* Advance to the next frame and check whether a stop was requested. */
 static void advance_animation(lv_timer_t *timer) {
     ARG_UNUSED(timer);
 
@@ -194,10 +215,12 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
 
     lv_obj_set_style_bg_color(widget->obj, LVGL_BACKGROUND, LV_PART_MAIN);
     lv_obj_set_style_bg_opa(widget->obj, LV_OPA_COVER, LV_PART_MAIN);
+    /* Create the image object and initially display the standing frame at index 0. */
     art_image = lv_img_create(widget->obj);
     displayed_frame = VAULT_BOY_STANDING_FRAME;
     lv_img_set_src(art_image, &vault_boy_frames[displayed_frame]);
     lv_obj_align(art_image, LV_ALIGN_TOP_LEFT, art_pos, 0);
+    /* Create both timers paused; keyboard input resumes them when needed. */
     idle_timer = lv_timer_create(request_stop_after_cycle, VAULT_BOY_IDLE_TIMEOUT_MS, NULL);
     lv_timer_pause(idle_timer);
     animation_timer = lv_timer_create(advance_animation, VAULT_BOY_WALK_FRAME_INTERVAL_MS, NULL);
