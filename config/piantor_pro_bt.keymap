@@ -20,6 +20,8 @@
     hold-while-undecided;
 };
 
+&lt { quick-tap-ms = <150>; };
+
 / {
     chosen { zmk,physical-layout = &default_layout; };
 
