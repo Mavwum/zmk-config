@@ -41,24 +41,24 @@ static bool stop_after_cycle;
 static size_t displayed_frame;
 
 /* State passed through the ZMK listener; true means a key is pressed. */
-struct animation_activity_state {
+struct typing_activity_state {
     bool pressed;
 };
 
 /* Converts the ZMK event (eh) into a simple pressed state. */
-static struct animation_activity_state animation_activity_get_state(const zmk_event_t *eh) {
+static struct typing_activity_state typing_activity_get_state(const zmk_event_t *eh) {
     if (eh == NULL) {
-        return (struct animation_activity_state){0};
+        return (struct typing_activity_state){0};
     }
 
     /* Points to the key-position data carried by the ZMK event. */
     const struct zmk_position_state_changed *event = as_zmk_position_state_changed(eh);
-    return (struct animation_activity_state){.pressed = event != NULL && event->state};
+    return (struct typing_activity_state){.pressed = event != NULL && event->state};
 }
 
 /* state contains the detected key state. On a key press, start the animation if needed,
  * reset the idle countdown, and cancel a pending stop if typing resumes before cycle end. */
-static void animation_activity_update_cb(struct animation_activity_state state) {
+static void typing_activity_update_cb(struct typing_activity_state state) {
     if (!state.pressed) {
         return;
     }
@@ -72,11 +72,11 @@ static void animation_activity_update_cb(struct animation_activity_state state) 
     lv_timer_resume(idle_timer);
 }
 
-/* Registers the callback for keyboard events; ZMK generates image_animation_activity_init(). */
-ZMK_DISPLAY_WIDGET_LISTENER(image_animation_activity, struct animation_activity_state,
-                            animation_activity_update_cb, animation_activity_get_state)
+/* Registers the callback for keyboard events; ZMK generates typing_activity_init(). */
+ZMK_DISPLAY_WIDGET_LISTENER(typing_activity, struct typing_activity_state,
+                            typing_activity_update_cb, typing_activity_get_state)
 /* Notify this listener when a key position state changes. */
-ZMK_SUBSCRIPTION(image_animation_activity, zmk_position_state_changed);
+ZMK_SUBSCRIPTION(typing_activity, zmk_position_state_changed);
 
 /* Called by the expired idle timer; schedule stopping at the end of the cycle. */
 static void request_stop_after_cycle(lv_timer_t *timer) {
@@ -220,7 +220,7 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
     widget_peripheral_status_init();
-    image_animation_activity_init();
+    typing_activity_init();
 
     return 0;
 }
