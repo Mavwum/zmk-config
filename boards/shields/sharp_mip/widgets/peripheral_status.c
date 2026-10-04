@@ -29,8 +29,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define VAULT_BOY_STANDING_FRAME 0
 /* Idle time before the current cycle is allowed to finish. */
 #define VAULT_BOY_IDLE_TIMEOUT_MS 2000
-/* Delay between frames; 9 frames make one cycle take about one second. */
-#define VAULT_BOY_WALK_FRAME_INTERVAL_MS 111
+/* Delay between frames; 9 frames make one cycle take about two seconds. */
+#define VAULT_BOY_WALK_FRAME_INTERVAL_MS 222
 
 /* Frame descriptors are defined in art.c and exposed through this array. */
 extern const lv_img_dsc_t vault_boy_frames[VAULT_BOY_FRAME_COUNT];
