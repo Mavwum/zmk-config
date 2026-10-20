@@ -17,10 +17,12 @@
     flavor = "tap-preferred";
     tapping-term-ms = <200>;
     quick-tap-ms = <150>;
-    hold-while-undecided;
 };
 
-&lt { quick-tap-ms = <150>; };
+&lt {
+    quick-tap-ms = <150>;
+    flavor = "tap-preferred";
+};
 
 / {
     chosen { zmk,physical-layout = &default_layout; };
