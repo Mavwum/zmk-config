@@ -6,7 +6,6 @@
  */
 
 #include <zephyr/kernel.h>
-#include <zephyr/random/random.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -16,6 +15,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/battery_state_changed.h>
+#include <zmk/events/position_state_changed.h>
 #include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/events/split_peripheral_status_changed.h>
 #include <zmk/usb.h>
@@ -23,10 +23,92 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include "peripheral_status.h"
 
-LV_IMG_DECLARE(balloon);
-LV_IMG_DECLARE(mountain);
+/* Idle time before the current cycle is allowed to finish. */
+#define ANIMATION_IDLE_TIMEOUT_MS 2000
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+/* LVGL image object that displays the current frame. */
+static lv_obj_t *animation_image;
+/* Timer that waits for the idle timeout after the last key press. */
+static lv_timer_t *idle_timer;
+/* Timer that calls advance_animation() at each frame interval. */
+static lv_timer_t *animation_timer;
+/* True while the animation timer is advancing frames. */
+static bool animation_active;
+/* When true, stop after the animation returns to frame 0. */
+static bool stop_after_cycle;
+/* Zero-based index of the displayed frame. */
+static size_t displayed_frame;
+
+/* State passed through the ZMK listener; true means a key is pressed. */
+struct typing_activity_state {
+    bool pressed;
+};
+
+/* Converts the ZMK event (eh) into a simple pressed state. */
+static struct typing_activity_state typing_activity_get_state(const zmk_event_t *eh) {
+    if (eh == NULL) {
+        return (struct typing_activity_state){0};
+    }
+
+    /* Points to the key-position data carried by the ZMK event. */
+    const struct zmk_position_state_changed *event = as_zmk_position_state_changed(eh);
+    return (struct typing_activity_state){.pressed = event != NULL && event->state};
+}
+
+/* state contains the detected key state. On a key press, start the animation if needed,
+ * reset the idle countdown, and cancel a pending stop if typing resumes before cycle end. */
+static void typing_activity_update_cb(struct typing_activity_state state) {
+    if (!state.pressed) {
+        return;
+    }
+
+    stop_after_cycle = false;
+    if (!animation_active) {
+        animation_active = true;
+        lv_timer_resume(animation_timer);
+    }
+    lv_timer_reset(idle_timer);
+    lv_timer_resume(idle_timer);
+}
+
+/* Registers the callback for keyboard events; ZMK generates typing_activity_init(). */
+ZMK_DISPLAY_WIDGET_LISTENER(typing_activity, struct typing_activity_state,
+                            typing_activity_update_cb, typing_activity_get_state)
+/* Notify this listener when a key position state changes. */
+ZMK_SUBSCRIPTION(typing_activity, zmk_position_state_changed);
+
+/* Called by the expired idle timer; schedule stopping at the end of the cycle. */
+static void request_stop_after_cycle(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    stop_after_cycle = animation_active;
+    lv_timer_pause(idle_timer);
+}
+
+/* Display the configured idle frame and pause both timers. */
+static void set_idle_frame(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    animation_active = false;
+    stop_after_cycle = false;
+    displayed_frame = sharp_mip_animation.idle_frame;
+    lv_img_set_src(animation_image, &sharp_mip_animation.frames[displayed_frame]);
+    lv_timer_pause(idle_timer);
+    lv_timer_pause(animation_timer);
+}
+
+/* Advance to the next frame and check whether a stop was requested. */
+static void advance_animation(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+
+    displayed_frame = (displayed_frame + 1) % sharp_mip_animation.frame_count;
+    lv_img_set_src(animation_image, &sharp_mip_animation.frames[displayed_frame]);
+
+    if (stop_after_cycle && displayed_frame == sharp_mip_animation.idle_frame) {
+        set_idle_frame(timer);
+    }
+}
 
 struct peripheral_status_state {
     bool connected;
@@ -122,14 +204,23 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     lv_obj_align(top, LV_ALIGN_TOP_LEFT, top_pos, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    lv_obj_t *art = lv_img_create(widget->obj);
-    bool random = sys_rand32_get() & 1;
-    lv_img_set_src(art, random ? &balloon : &mountain);
-    lv_obj_align(art, LV_ALIGN_TOP_LEFT, art_pos, 0);
+    lv_obj_set_style_bg_color(widget->obj, LVGL_BACKGROUND, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(widget->obj, LV_OPA_COVER, LV_PART_MAIN);
+    /* Create the image object and initially display the standing frame at index 0. */
+    animation_image = lv_img_create(widget->obj);
+    displayed_frame = sharp_mip_animation.idle_frame;
+    lv_img_set_src(animation_image, &sharp_mip_animation.frames[displayed_frame]);
+    lv_obj_align(animation_image, LV_ALIGN_TOP_LEFT, art_pos, 0);
+    /* Create both timers paused; keyboard input resumes them when needed. */
+    idle_timer = lv_timer_create(request_stop_after_cycle, ANIMATION_IDLE_TIMEOUT_MS, NULL);
+    lv_timer_pause(idle_timer);
+    animation_timer = lv_timer_create(advance_animation, sharp_mip_animation.frame_interval_ms, NULL);
+    lv_timer_pause(animation_timer);
 
     sys_slist_append(&widgets, &widget->node);
     widget_battery_status_init();
     widget_peripheral_status_init();
+    typing_activity_init();
 
     return 0;
 }
