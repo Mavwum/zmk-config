@@ -19,10 +19,7 @@
     quick-tap-ms = <150>;
 };
 
-&lt {
-    quick-tap-ms = <150>;
-    flavor = "tap-preferred";
-};
+&lt { flavor = "tap-preferred"; };
 
 / {
     chosen { zmk,physical-layout = &default_layout; };
