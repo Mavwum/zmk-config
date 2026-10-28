@@ -1,0 +1,11 @@
+#pragma once
+#include "action.h"
+#include "quantum_keycodes.h"
+#include <stddef.h>
+uint8_t read_source_layers_cache(keypos_t);
+void send_keyboard_report(void);
+void add_key(uint8_t);
+void del_key(uint8_t);
+void register_code(uint8_t);
+void unregister_code(uint8_t);
+void register_code16(uint16_t);

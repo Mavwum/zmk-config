@@ -1,0 +1,11 @@
+description: Keebart runtime key binding
+compatible: "keebart,studio-key"
+include: two_param.yaml
+
+properties:
+  "#sensor-binding-cells":
+    type: int
+    const: 2
+sensor-binding-cells:
+  - param1
+  - param2

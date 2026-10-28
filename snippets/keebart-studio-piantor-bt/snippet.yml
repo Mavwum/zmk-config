@@ -1,0 +1,8 @@
+name: keebart-studio-piantor-bt
+append:
+  EXTRA_CONF_FILE: ../keebart-studio/keebart.conf
+  EXTRA_DTC_OVERLAY_FILE: keymap.overlay
+boards:
+  piantor_pro_bt_left:
+    append:
+      EXTRA_CONF_FILE: board.conf
