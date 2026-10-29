@@ -1,0 +1,10 @@
+config KEEBART_STUDIO
+    bool "Keebart Studio USB configuration"
+    depends on ZMK_USB && (!ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL)
+    depends on !ZMK_STUDIO
+    select SETTINGS
+    select USB_DEVICE_HID
+
+config KEEBART_STUDIO_PERIPHERAL
+    bool "Keebart Studio split lighting receiver"
+    depends on ZMK_SPLIT && !ZMK_SPLIT_ROLE_CENTRAL

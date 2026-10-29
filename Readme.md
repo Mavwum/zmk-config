@@ -1,15 +1,16 @@
 # Keebart ZMK Firmware
 
 This repository contains the ZMK firmware configuration for Keebart wireless
-split keyboards. It includes board definitions, default keymaps, ZMK Studio
-support, Sharp Memory-in-Pixel display support, RGB underglow, and GitHub
-Actions firmware builds.
+split keyboards. It includes board definitions, Keebart Studio firmware for
+six-column keyboards, Sharp Memory-in-Pixel display support, RGB lighting, and
+GitHub Actions firmware builds. See [Studio builds and customization](studio/README.md).
 
 - Maintainer: [Keebart](https://github.com/Keebart)
 - Firmware: [ZMK](https://zmk.dev/)
 - Miryoku firmware: [Keebart/miryoku_zmk](https://github.com/Keebart/miryoku_zmk)
 - Online keymap editor: [ZMK Keymap Editor](https://nickcoutsos.github.io/keymap-editor/)
-- Runtime editor: [ZMK Studio](https://zmk.studio/)
+- Runtime editor (six-column Studio firmware): [Keebart Studio](https://www.keebart.com/studio)
+- Runtime editor (legacy five-column firmware): [ZMK Studio](https://zmk.studio/)
 
 ## Supported keyboards
 
@@ -117,7 +118,9 @@ the merged `firmware` artifact after the build finishes.
 The build matrix is defined in `build.yaml`. Normal firmware uses the custom
 `sharp_mip` shield on every keyboard. Corne and Piantor use its default
 orientation; Sofle enables the 180-degree rotation in its board configuration.
-The central, left-side builds include ZMK Studio support.
+Six-column left-side builds use Keebart Studio. Five-column variants retain
+their ZMK Studio configuration. See [Studio builds](studio/README.md) for all
+six-column local build commands and customization files.
 
 For a local build, first create a normal ZMK west workspace using the manifest
 in `config/west.yml`. From the workspace root, run a command such as:
@@ -232,3 +235,26 @@ Corne Choc Pro supports four encoder definitions:
 Sofle Choc Pro uses one encoder for volume and the other for previous/next
 media track. The encoder actions are available on its default, Lower, and
 Raise layers.
+
+## License
+
+Original Keebart code, configuration, and documentation are available under
+the [MIT License](LICENSE), except where a file or component
+specifies another license. You may use, modify, and redistribute material
+covered by MIT for any purpose, including commercially, provided you retain
+the copyright and license notice. MIT does not require publishing your changes.
+
+Existing third-party code and derivatives retain their original licenses and
+copyright notices:
+
+- ZMK-derived files marked `SPDX-License-Identifier: MIT`, including the
+  Sharp MIP display widgets and artwork, remain under the
+  [MIT license](LICENSES/MIT.txt).
+- The QMK-derived override engine in `studio/override_engine/process_key_override.c`
+  and `process_key_override.h`, copyright 2021 Jonas Gessner, remains under
+  [GPL-2.0-or-later](LICENSES/GPL-2.0-or-later.txt), as stated in those files.
+
+The root license does not replace these licenses or the licenses of external
+dependencies. Distributing firmware that incorporates the GPL override engine
+requires complying with the applicable GPL terms, including corresponding
+source obligations.
