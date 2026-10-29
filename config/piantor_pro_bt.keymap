@@ -86,6 +86,13 @@
 
             label = "HYPER";
         };
+
+        start_day: start_day {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&none &kp P &kp F &kp A &kp G &kp E &kp N &kp T &kp C &kp T &kp L &kp SPACE &kp D &kp A &kp Y &kp SPACE &kp S &kp T &kp A &kp R &kp T>;
+            label = "START_DAY";
+        };
     };
 
     combos {
@@ -276,7 +283,7 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-&none  &hyper Q  &hyper W  &hyper E  &hyper R  &hyper T  &hyper Z  &hyper U  &hyper I  &hyper O  &hyper P  &none  &none  &git_log  &add_commit  &git_diff  &hyper F  &hyper G  &hyper H  &hyper J  &hyper K  &none  &none  &none  &none  &hyper Y  &hyper X  &hyper C  &hyper V  &hyper B  &hyper N  &hyper M  &hyper COMMA  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &kp LA(LC(Q))  &none  &none  &none  &start_day  &git_diff  &hyper F  &hyper G  &none  &none  &none  &git_log  &none  &none  &none  &none  &none  &add_commit  &none  &none  &none  &none  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
