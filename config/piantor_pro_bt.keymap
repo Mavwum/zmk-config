@@ -283,7 +283,7 @@
             //|                          (Left Shift + Left GUI + 4)                     |
 
             bindings = <
-&none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &kp LA(LC(Q))  &none  &none  &none  &start_day  &git_diff  &hyper F  &hyper G  &none  &none  &none  &git_log  &none  &none  &none  &none  &none  &add_commit  &none  &none  &none  &none  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &none  &none  &none  &none  &none  &none  &none  &none  &none  &kp LC(LG(Q))  &none  &none  &none  &start_day  &git_diff  &hyper F  &hyper G  &none  &none  &none  &git_log  &none  &none  &none  &none  &none  &add_commit  &none  &none  &none  &none  &none  &none  &none  &none  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
     };
